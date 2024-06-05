@@ -1,0 +1,16 @@
+{
+    "type" : "object",
+    "properties" : {
+        "json_file" : {"type" : "string"},
+        "output_file" : {"type" : "string"},
+        "json_keywords" : {
+            "type" : ["array"],
+            "items" : {"type" : "array", "items" : {"type" : "string"}}
+        },
+        "output_headers" : {
+            "type" : "array",
+            "items" : {"type" : "string"}
+        }
+    },
+    "required": ["json_file", "json_keywords", "output_headers"]
+}
