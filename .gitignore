@@ -171,3 +171,4 @@ config/
 upload/
 .vscode/
 .DS_Store
+.flask-version/
