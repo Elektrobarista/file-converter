@@ -1,0 +1,15 @@
+{
+    "type" : "object",
+    "properties" : {
+        "download_name" : {"type" : "string"},
+        "json_keywords" : {
+            "type" : ["array"],
+            "items" : {"type" : "array", "items" : {"type" : "string"}}
+        },
+        "output_headers" : {
+            "type" : "array",
+            "items" : {"type" : "string"}
+        }
+    },
+    "required": ["json_keywords", "output_headers"]
+}
