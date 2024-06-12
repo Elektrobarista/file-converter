@@ -24,8 +24,6 @@ class JsonToCSVConverter:
             return item
 
     def process_json_to_csv(self):
-        print(f'keyword: {self.json_keywords}')
-        print(f'headers: {self.csv_headers}')
         # save json content of file in memory
         data = json.loads(self.file.decode('utf-8'))
         s = io.StringIO()
@@ -33,7 +31,6 @@ class JsonToCSVConverter:
         writer.writerow(self.csv_headers)
         for item in data:
             row_data = [self._get_nested_value(item, keyword) for keyword in self.json_keywords]
-            print(f'Row data: {row_data}')
             writer.writerow(row_data)    
         s.seek(0)
         csv_string = s.getvalue()
