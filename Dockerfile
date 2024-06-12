@@ -27,6 +27,9 @@ RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /
 # Add crontab file in the cron directory
 COPY crontab /etc/cron.d/maintainer-cron
 
+# Give execution rights on the cron job and the script
+RUN chmod 0644 /etc/cron.d/maintainer-cron && chmod +x /app/request_handler/maintainer_db.py
+
 # Apply cron job
 RUN crontab /etc/cron.d/maintainer-cron
 
@@ -34,5 +37,4 @@ RUN crontab /etc/cron.d/maintainer-cron
 RUN touch /var/log/cron.log
 
 # Start the cron service and your application
-#CMD ["sh", "-c", "python /app/request_handler/startdb.py && cron && tail -f /var/log/cron.log & gunicorn --bind 0.0.0.0:5001 run:app"]
-CMD ["sh", "-c", "cron && su appuser -c 'python /app/request_handler/startdb.py && gunicorn --bind 0.0.0.0:5001 run:app' && tail -f /var/log/cron.log"]
+CMD ["sh", "-c", "cron && su appuser -c 'cd /app && python request_handler/startdb.py && gunicorn --bind 0.0.0.0:5001 run:app' && tail -f /var/log/cron.log"]

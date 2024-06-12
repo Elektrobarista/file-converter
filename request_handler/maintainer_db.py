@@ -9,8 +9,10 @@ import os
 
 load_dotenv()
 
+cursor = None
+
 # Path to your SQLite database file
-db_path = './request_handler/file_address.db'
+db_path = 'file_address.db'
 
 # Read the threshold minutes from the .env file
 threshold_minutes = int(os.getenv('TRESHOLD_MINUTES'))
@@ -22,16 +24,26 @@ threshold_datetime = datetime.now() - timedelta(minutes=threshold_minutes)
 threshold_datetime_str = threshold_datetime.strftime('%Y-%m-%d %H:%M:%S')
 
 # Connect to the SQLite database
-conn = sqlite3.connect(db_path)
-cursor = conn.cursor()
+try:
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+except sqlite3.Error as e:
+    print(e)
 
-# Execute the SQL command to delete old entries
-delete_query = """
-DELETE FROM file_location
-WHERE strftime('%Y-%m-%d %H:%M:%S', timestamp) < strftime('%Y-%m-%d %H:%M:%S', ?);
-"""
-cursor.execute(delete_query, (threshold_datetime_str,))
+if cursor:
+    # Execute the SQL command to delete old entries
+    delete_query = """
+    DELETE FROM file_location
+    WHERE strftime('%Y-%m-%d %H:%M:%S', timestamp) < strftime('%Y-%m-%d %H:%M:%S', ?);
+    """
 
-# Commit the changes and close the connection
-conn.commit()
-conn.close()
+    try:
+        cursor.execute(delete_query, (threshold_datetime_str,))
+    except sqlite3.Error as e:
+        print(e)
+
+    # Commit the changes and close the connection
+    conn.commit()
+    conn.close()
+else:
+    print('Error: Could not connect to the SQLite database.')

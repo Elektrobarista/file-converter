@@ -1,2 +1,2 @@
 # Run the maintainer_db.py script every 10 minutes
-*/10 * * * * appuser python /app/maintainer_db.py >> /var/log/cron.log 2>&1
+*/2 * * * * su appuser && cd /app/request_handler && ls && /usr/local/bin/python maintainer_db.py >> /var/log/cron.log 2>&1
